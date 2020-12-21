@@ -6,7 +6,7 @@ RSpec.describe "bundle install with a gemfile that forces a gem version" do
   context "with a simple conflict" do
     it "works" do
       install_gemfile <<-G
-        source "file:#{gem_repo1}"
+        source "#{file_uri_for(gem_repo1)}"
         gem "rack_middleware"
         gem "rack", "1.0.0", :force_version => true
       G
@@ -38,7 +38,7 @@ RSpec.describe "bundle install with a gemfile that forces a gem version" do
 
     it "works when there's no conflict" do
       install_gemfile <<-G
-        source "file:#{gem_repo1}"
+        source "#{file_uri_for(gem_repo1)}"
         gem "rack", "1.0.0", :force_version => true
       G
 
@@ -49,7 +49,7 @@ RSpec.describe "bundle install with a gemfile that forces a gem version" do
   context "with a complex conflict" do
     it "works" do
       install_gemfile <<-G
-        source "file:#{gem_repo1}"
+        source "#{file_uri_for(gem_repo1)}"
         gem "rails", "2.3.2"
         gem "activesupport", "2.3.5", :force_version => true
       G
@@ -61,7 +61,7 @@ RSpec.describe "bundle install with a gemfile that forces a gem version" do
   context "shows indicator that force_version was active" do
     it "works" do
       gemfile <<-G
-        source "file:#{gem_repo1}"
+        source "#{file_uri_for(gem_repo1)}"
         gem "rack_middleware"
         gem "rack", "1.0.0", :force_version => true
       G
