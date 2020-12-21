@@ -57,4 +57,23 @@ RSpec.describe "bundle install with a gemfile that forces a gem version" do
       expect(the_bundle).to include_gems("rails 2.3.2", "activesupport 2.3.5", "actionpack 2.3.2", "activerecord 2.3.2", "actionmailer 2.3.2", "activeresource 2.3.2")
     end
   end
+
+  context "shows indicator that force_version was active" do
+    it "works" do
+      gemfile <<-G
+        source "file:#{gem_repo1}"
+        gem "rack_middleware"
+        gem "rack", "1.0.0", :force_version => true
+      G
+
+      bundle :install
+
+      expect(out).to include("Installing rack 1.0.0 [version forced]")
+
+      bundle :install
+
+      expect(out).to include("Using rack 1.0.0 [version forced]")
+    end
+
+  end
 end
