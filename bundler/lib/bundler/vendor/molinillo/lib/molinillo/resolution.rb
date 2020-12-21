@@ -702,7 +702,12 @@ module Bundler::Molinillo
       # @param [Object] vertex existing vertex
       # @return [PossibilitySet] filtered possibility set
       def filtered_possibility_set(vertex)
-        PossibilitySet.new(vertex.payload.dependencies, vertex.payload.possibilities & possibility.possibilities)
+        filtered = if vertex.requirements.any?(&:force_version?)
+          vertex.payload.possibilities
+        else
+          vertex.payload.possibilities & possibility.possibilities
+        end
+        PossibilitySet.new(vertex.payload.dependencies, filtered)
       end
 
       # @param [String] requirement_name the spec name to search for
