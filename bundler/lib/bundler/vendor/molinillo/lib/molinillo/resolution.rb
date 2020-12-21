@@ -703,6 +703,7 @@ module Bundler::Molinillo
       # @return [PossibilitySet] filtered possibility set
       def filtered_possibility_set(vertex)
         filtered = if vertex.requirements.any?(&:force_version?)
+          debug(depth) { "Forced version from existing spec (#{vertex.payload})" }
           vertex.payload.possibilities
         else
           vertex.payload.possibilities & possibility.possibilities
