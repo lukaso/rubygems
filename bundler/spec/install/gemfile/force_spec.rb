@@ -14,21 +14,25 @@ RSpec.describe "bundle install with a gemfile that forces a gem version" do
     end
 
     it "raises when forcing to an inexact version" do
-      install_gemfile <<-G
+      gemfile <<-G
         gem "rack", "> 1.0.0", :force_version => true
       G
 
-      bundle :install, :env => { "DEBUG" => "1" }
+      bundle :install, :quiet => true, :raise_on_error => false
 
-      expect(out).to include("Cannot use force_version for inexact version requirement `> 1.0.0`.")
+      expect(exitstatus).to_not eq(0)
+      expect(err).to include("Cannot use force_version for inexact version requirement `> 1.0.0`.")
     end
 
     it "raises when forcing without specifying a version" do
-      install_gemfile <<-G
+      gemfile <<-G
         gem "rack", :force_version => true
       G
 
-      expect(out).to include("Cannot use force_version for inexact version requirement `>= 0`.")
+      bundle :install, :quiet => true, :raise_on_error => false
+
+      expect(exitstatus).to_not eq(0)
+      expect(err).to include("Cannot use force_version for inexact version requirement `>= 0`.")
     end
 
     it "works when there's no conflict" do
