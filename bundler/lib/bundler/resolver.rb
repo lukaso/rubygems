@@ -51,7 +51,7 @@ module Bundler
       dg.
         tap {|resolved| validate_resolved_specs!(resolved) }.
         map(&:payload).
-        reject {|sg| sg&.name.end_with?("\0") }.
+        reject {|sg| sg&.name&.end_with?("\0") }.
         map(&:to_specs).
         flatten
     rescue Molinillo::VersionConflict => e
