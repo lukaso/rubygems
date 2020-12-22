@@ -216,13 +216,10 @@ module Bundler
         end
     end
 
-    def locked_bundler_version
-      return nil unless definition?
+    def most_specific_locked_platform?(platform)
+      return false unless definition?
 
-      locked_gems = definition.locked_gems
-      return nil unless locked_gems
-
-      locked_gems.bundler_version
+      definition.most_specific_locked_platform == platform
     end
 
     def ruby_scope
