@@ -48,6 +48,8 @@ module Bundler
 
       verify_gemfile_dependencies_are_found!(requirements)
       dg = @resolver.resolve(requirements, @base_dg)
+      puts "****"
+      puts dg.tap {|resolved| validate_resolved_specs!(resolved) }.map(&:payload).map(&:name)
       dg.
         tap {|resolved| validate_resolved_specs!(resolved) }.
         map(&:payload).

@@ -10,7 +10,7 @@ RSpec.describe "bundle install with a gemfile that forces a gem version" do
         gem "rack_middleware"
         gem "rack", "1.0.0", :force_version => true
       G
-
+puts out
       expect(the_bundle).to include_gems("rack 1.0.0", "rack_middleware 1.0")
     end
 
