@@ -41,7 +41,7 @@ jobs:
         shell: bash
       - name: Run specs
         run: |
-          bin/rspec spec/install/gemfile/force_spec.rb:7
+          bin/rspec spec/install/gemfile/force_spec.rb spec/install/gemfile/sources_spec.rb
         working-directory: ./bundler
         shell: bash
         if: "!startsWith(matrix.ruby.name, 'jruby')"
