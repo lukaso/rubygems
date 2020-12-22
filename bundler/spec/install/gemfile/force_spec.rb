@@ -70,9 +70,11 @@ RSpec.describe "bundle install with a gemfile that forces a gem version" do
 
       expect(out).to include("Installing rack 1.0.0 [version forced]")
 
-      bundle :install
+      if Gem::Version.create(Bundler::VERSION).segments.first < 3
+        bundle :install
 
-      expect(out).to include("Using rack 1.0.0 [version forced]")
+        expect(out).to include("Using rack 1.0.0 [version forced]")
+      end
     end
   end
 end
