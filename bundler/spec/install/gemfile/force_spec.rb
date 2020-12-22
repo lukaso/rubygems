@@ -10,7 +10,7 @@ RSpec.describe "bundle install with a gemfile that forces a gem version" do
         gem "rack_middleware"
         gem "rack", "1.0.0", :force_version => true
       G
-puts out
+
       expect(the_bundle).to include_gems("rack 1.0.0", "rack_middleware 1.0")
     end
 
@@ -43,6 +43,19 @@ puts out
       G
 
       expect(the_bundle).to include_gems("rack 1.0.0")
+    end
+
+    it "raises when gem doesn't exist" do
+      gemfile <<-G
+        source "#{file_uri_for(gem_repo1)}"
+        gem "rack_middleware"
+        gem "rack", "2.0.0", :force_version => true
+      G
+
+      bundle :install, :quiet => true, :raise_on_error => false
+
+      expect(exitstatus).to_not eq(0)
+      expect(err).to include("Could not find gem 'rack (= 2.0.0)")
     end
   end
 
