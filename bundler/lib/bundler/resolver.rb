@@ -448,7 +448,7 @@ module Bundler
       puts "spec gemspec #{spec.source.is_a?(Source::Gemspec)}"
       puts "force_version #{requirement.force_version?}"
       puts "vertex requirements #{activated.vertex_named(spec.name).requirements.any?(&:force_version?)}"
-      puts caller.join("\n")
+      # puts caller.join("\n")
       return true if spec.source.is_a?(Source::Gemspec)
       return false if requirement.force_version?
       return true if activated.vertex_named(spec.name).requirements.any?(&:force_version?)

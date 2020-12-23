@@ -166,8 +166,10 @@ module Bundler::Molinillo
       #   dependencies
       def resolve
         start_resolution
+        puts "^^^^ #{activated.inspect}"
 
         while state
+          puts "^^^^ #{activated.inspect}"
           break if !state.requirement && state.requirements.empty?
           indicate_progress
           if state.respond_to?(:pop_possibility_state) # DependencyState
