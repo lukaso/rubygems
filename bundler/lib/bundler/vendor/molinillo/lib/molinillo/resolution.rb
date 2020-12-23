@@ -181,7 +181,7 @@ module Bundler::Molinillo
           end
           process_topmost_state
         end
-
+puts ",,,, #{activated.inspect}"
         resolve_activated_specs
       ensure
         end_resolution
@@ -220,7 +220,7 @@ module Bundler::Molinillo
           latest_version = vertex.payload.possibilities.reverse_each.find do |possibility|
             vertex.requirements.all? { |req| requirement_satisfied_by?(req, activated, possibility) }
           end
-
+puts "latest_version #{latest_version}"
           activated.set_payload(vertex.name, latest_version)
         end
         activated.freeze

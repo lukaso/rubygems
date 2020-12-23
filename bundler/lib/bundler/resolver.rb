@@ -48,7 +48,7 @@ module Bundler
 
       verify_gemfile_dependencies_are_found!(requirements)
       dg = @resolver.resolve(requirements, @base_dg)
-      puts "***** #{@resolver.class}"
+      puts "***** #{dg.inspect}"
       dg.
         tap {|resolved| validate_resolved_specs!(resolved) }.
         map(&:payload).
@@ -448,6 +448,7 @@ module Bundler
       puts "spec gemspec #{spec.source.is_a?(Source::Gemspec)}"
       puts "force_version #{requirement.force_version?}"
       puts "vertex requirements #{activated.vertex_named(spec.name).requirements.any?(&:force_version?)}"
+      puts caller.join("\n")
       return true if spec.source.is_a?(Source::Gemspec)
       return false if requirement.force_version?
       return true if activated.vertex_named(spec.name).requirements.any?(&:force_version?)
