@@ -48,10 +48,11 @@ module Bundler
 
       verify_gemfile_dependencies_are_found!(requirements)
       dg = @resolver.resolve(requirements, @base_dg)
+      puts "***** #{@resolver.class}"
       dg.
         tap {|resolved| validate_resolved_specs!(resolved) }.
         map(&:payload).
-        reject {|sg| sg.nil? || sg.name&.end_with?("\0") }.
+        reject {|sg| puts "++++ #{sg}"; sg.name.end_with?("\0") }.
         map(&:to_specs).
         flatten
     rescue Molinillo::VersionConflict => e
@@ -284,6 +285,8 @@ module Bundler
                           rescue GemfileNotFound
                             nil
                           end
+                          puts "***** #{name}"
+                          puts @base[name]
 
         if (base = @base[name]) && !base.empty?
           version = base.first.version
