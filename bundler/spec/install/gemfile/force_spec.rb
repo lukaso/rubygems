@@ -5,11 +5,13 @@ require "spec_helper"
 RSpec.describe "bundle install with a gemfile that forces a gem version" do
   context "with a simple conflict" do
     it "works" do
-      install_gemfile <<-G
+      gemfile <<-G
         source "#{file_uri_for(gem_repo1)}"
         gem "rack_middleware"
         gem "rack", "1.0.0", :force_version => true
       G
+
+      bundle :install, :raise_on_error => false
 
       puts out
       expect(the_bundle).to include_gems("rack 1.0.0", "rack_middleware 1.0")
