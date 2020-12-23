@@ -261,6 +261,11 @@ class Gem::Resolver
   end
 
   def requirement_satisfied_by?(requirement, activated, spec)
+    puts ">>>>>"
+    puts "requirement #{requirement}"
+    puts "activated #{activated}"
+    puts "spec #{spec}"
+
     matches_spec = requirement.matches_spec? spec
     return matches_spec if @soft_missing
 
