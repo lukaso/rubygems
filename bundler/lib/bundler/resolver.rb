@@ -204,7 +204,14 @@ module Bundler
     end
 
     def requirement_satisfied_by?(requirement, activated, spec)
-      requirement.matches_spec?(spec) || allows_conflicts?(requirement, activated, spec)
+      return true if spec.source.is_a?(Source::Gemspec)
+      return true if requirement.matches_spec?(spec) &&
+                     requirement.force_version?
+      return true if requirement.matches_spec?(spec) &&
+                     !activated.vertex_named(spec.name).requirements.any?(&:force_version?)
+      return true if !requirement.matches_spec?(spec) &&
+                     activated.vertex_named(spec.name).requirements.any?(&:force_version?)
+      false
     end
 
     def relevant_sources_for_vertex(vertex)
@@ -438,21 +445,6 @@ module Bundler
         raise SecurityError, msg if multisource_disabled
         Bundler.ui.warn "Warning: #{msg}"
       end
-    end
-
-    def allows_conflicts?(requirement, activated, spec)
-      puts "///////"
-      puts "requirement #{requirement}"
-      puts "activated #{activated}"
-      puts "spec #{spec}"
-      puts "spec gemspec #{spec.source.is_a?(Source::Gemspec)}"
-      puts "force_version #{requirement.force_version?}"
-      puts "vertex requirements #{activated.vertex_named(spec.name).requirements.any?(&:force_version?)}"
-      # puts caller.join("\n")
-      return true if spec.source.is_a?(Source::Gemspec)
-      return false if requirement.force_version?
-      return true if activated.vertex_named(spec.name).requirements.any?(&:force_version?)
-      false
     end
   end
 end

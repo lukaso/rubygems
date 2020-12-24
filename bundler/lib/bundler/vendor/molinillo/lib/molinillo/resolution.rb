@@ -169,8 +169,8 @@ module Bundler::Molinillo
         puts "^^^^ #{activated.inspect}"
 
         while state
-          puts "^^^^ #{activated.inspect}"
           break if !state.requirement && state.requirements.empty?
+          puts "^^^^ #{activated.inspect}"
           indicate_progress
           if state.respond_to?(:pop_possibility_state) # DependencyState
             debug(depth) { "Creating possibility state for #{requirement} (#{possibilities.count} remaining)" }
@@ -671,6 +671,13 @@ puts "latest_version #{latest_version}"
         else
           latest = possibility.latest_version
           possibility.possibilities.select! do |possibility|
+            puts '\\\\\\'
+            puts "requirement #{requirement}"
+            puts "possibility #{possibility}"
+            puts "spec gemspec #{possibility.source.is_a?(Bundler::Source::Gemspec)}"
+            puts "force_version #{requirement.force_version?}"
+            puts "vertex requirements #{activated.vertex_named(possibility.name).requirements.any?(&:force_version?)}"
+      
             requirement_satisfied_by?(requirement, activated, possibility)
           end
           if possibility.latest_version.nil?
