@@ -324,13 +324,15 @@ module Bundler::Molinillo
         binding_requirements = binding_requirements_for_conflict(current_conflict)
         unwind_details = unwind_options_for_requirements(binding_requirements)
 
+        current_detail = unwind_details.sort.last
+
         # Add the current unwind options to the `unused_unwind_options` array.
         # The "used" option will be filtered out during `unwind_for_conflict`.
         state.unused_unwind_options += unwind_details.reject { |detail| detail.state_index == -1 }
 
         unwind_details.each { |d| d.requirements_unwound_to_instead << current_detail.state_requirement }
 
-        unwind_details.sort.last
+        current_detail
       end
 
       # @param [Array<Object>] binding_requirements array of requirements that combine to create a conflict
