@@ -18,8 +18,19 @@ module Bundler
       message = "#{spec.name} #{spec.version}"
       message += " (#{spec.platform})" if spec.platform != Gem::Platform::RUBY && !spec.platform.nil?
 
-      if Bundler.definition? && Bundler.definition.dependencies.select {|d| d.name == spec.name }.any?(&:force_version?)
-        message += " [version forced]"
+      if Bundler.definition?
+        deps = Bundler.definition.dependencies
+        if deps.select {|d| d.name == spec.name }.any?(&:force_version?)
+          message += " [version forced]"
+        end
+
+        if deps.select {|d| d.name == spec.name }.any?(&:override_ruby_version?)
+          message += " [ruby version overridden]"
+        end
+
+        if deps.select {|d| d.name == spec.name }.any?(&:override_rubygems_version?)
+          message += " [rubygems version overridden]"
+        end
       end
 
       if Bundler.locked_gems

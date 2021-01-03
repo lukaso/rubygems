@@ -47,6 +47,8 @@ module Bundler
       requirements.each {|dep| @prerelease_specified[dep.name] ||= dep.prerelease? }
 
       @forced_requirements = requirements.select(&:force_version?).map {|dep| [dep.name, dep] }.to_h
+      @override_ruby_versions = requirements.select(&:override_ruby_version?).map {|spec| [spec.name, true] }.to_h
+      @override_rubygems_versions = requirements.select(&:override_rubygems_version?).map {|spec| [spec.name, true] }.to_h
 
       verify_gemfile_dependencies_are_found!(requirements)
       dg = @resolver.resolve(requirements, @base_dg)
@@ -105,7 +107,7 @@ module Bundler
     include Molinillo::SpecificationProvider
 
     def dependencies_for(specification)
-      deps = specification.dependencies_for_activated_platforms
+      deps = specification.dependencies_for_activated_platforms(@override_ruby_versions, @override_rubygems_versions)
       deps.map {|dep| @forced_requirements[dep.name] || dep }
     end
 

@@ -16,7 +16,8 @@ module Bundler
     VALID_PLATFORMS = Bundler::Dependency::PLATFORM_MAP.keys.freeze
 
     VALID_KEYS = %w[group groups git path glob name branch ref tag require submodules
-                    platform platforms type source install_if gemfile force_version].freeze
+                    platform platforms type source install_if gemfile force_version
+                    override_ruby_version override_rubygems_version].freeze
 
     attr_reader :gemspecs
     attr_accessor :dependencies

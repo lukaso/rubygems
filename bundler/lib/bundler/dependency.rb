@@ -90,6 +90,8 @@ module Bundler
 
       @autorequire = Array(options["require"] || []) if options.key?("require")
       @force_version = options.fetch("force_version", false)
+      @override_ruby_version = options.fetch("override_ruby_version", false)
+      @override_rubygems_version = options.fetch("override_rubygems_version", false)
     end
 
     # Returns the platforms this dependency is valid for, in the same order as
@@ -114,6 +116,14 @@ module Bundler
 
     def force_version?
       @force_version
+    end
+
+    def override_ruby_version?
+      @override_ruby_version
+    end
+
+    def override_rubygems_version?
+      @override_rubygems_version
     end
 
     def current_env?

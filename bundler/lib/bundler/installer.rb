@@ -252,16 +252,17 @@ module Bundler
       rubygems_version = Gem::Version.create(Gem::VERSION)
       @definition.specs.each do |spec|
         if required_ruby_version = spec.required_ruby_version
-          unless required_ruby_version.satisfied_by?(system_ruby.gem_version)
+          unless required_ruby_version.satisfied_by?(system_ruby.gem_version) ||
+              @definition.dependencies.select {|d| d.name == spec.name }.any?(&:override_ruby_version?)
             raise InstallError, "#{spec.full_name} requires ruby version #{required_ruby_version}, " \
               "which is incompatible with the current version, #{system_ruby}"
           end
         end
         next unless required_rubygems_version = spec.required_rubygems_version
-        unless required_rubygems_version.satisfied_by?(rubygems_version)
-          raise InstallError, "#{spec.full_name} requires rubygems version #{required_rubygems_version}, " \
-            "which is incompatible with the current version, #{rubygems_version}"
-        end
+        next if required_rubygems_version.satisfied_by?(rubygems_version) ||
+          @definition.dependencies.select {|d| d.name == spec.name }.any?(&:override_rubygems_version?)
+        raise InstallError, "#{spec.full_name} requires rubygems version #{required_rubygems_version}, " \
+          "which is incompatible with the current version, #{rubygems_version}"
       end
     end
 

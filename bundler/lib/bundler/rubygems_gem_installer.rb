@@ -9,6 +9,10 @@ module Bundler
     end
 
     def pre_install_checks
+      spec.required_ruby_version = nil if Bundler.definition? &&
+        Bundler.definition.dependencies.select {|d| d.name == spec.name }.any?(&:override_ruby_version?)
+      spec.required_rubygems_version = nil if Bundler.definition? &&
+        Bundler.definition.dependencies.select {|d| d.name == spec.name }.any?(&:override_rubygems_version?)
       super && validate_bundler_checksum(options[:bundler_expected_checksum])
     end
 

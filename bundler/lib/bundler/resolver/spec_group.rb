@@ -55,10 +55,10 @@ module Bundler
         "#{name} (#{version}) (#{activated_platforms_string})"
       end
 
-      def dependencies_for_activated_platforms
+      def dependencies_for_activated_platforms(override_ruby_versions = {}, override_rubygems_versions = {})
         dependencies = @activated_platforms.map {|p| __dependencies[p] }
         metadata_dependencies = @activated_platforms.map do |platform|
-          metadata_dependencies(@specs[platform].first, platform)
+          metadata_dependencies(@specs[platform].first, platform, override_ruby_versions, override_rubygems_versions)
         end
         dependencies.concat(metadata_dependencies).flatten
       end
@@ -106,9 +106,13 @@ module Bundler
         end
       end
 
-      def metadata_dependencies(spec, platform)
+      def metadata_dependencies(spec, platform, override_ruby_versions, override_rubygems_versions)
         return [] unless spec && spec.is_a?(Gem::Specification)
         dependencies = []
+
+        spec.required_ruby_version = nil if override_ruby_versions[spec.name]
+        spec.required_rubygems_version = nil if override_rubygems_versions[spec.name]
+
         if !spec.required_ruby_version.nil? && !spec.required_ruby_version.none?
           dependencies << DepProxy.new(Gem::Dependency.new("Ruby\0", spec.required_ruby_version), platform)
         end
