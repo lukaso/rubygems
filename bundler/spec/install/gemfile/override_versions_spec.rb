@@ -17,6 +17,7 @@ RSpec.describe "bundle install with a gemfile that overrides the ruby version" d
     G
 
     expect(out).to_not include("rack-9001.0.0 requires ruby version > 9000")
+    expect(out).to include("[ruby version overridden]")
     expect(the_bundle).to include_gems("rack 9001.0.0")
   end
 end
@@ -36,6 +37,7 @@ RSpec.describe "bundle install with a gemfile that overrides the rubygems versio
     G
 
     expect(out).to_not include("rack-9001.0.0 requires rubygems version > 9000")
+    expect(out).to include("[rubygems version overridden]")
     expect(the_bundle).to include_gems("rack 9001.0.0")
   end
 end
